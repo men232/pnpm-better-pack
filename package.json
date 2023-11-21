@@ -1,0 +1,37 @@
+{
+	"name": "pnpm-better-pack",
+	"version": "1.0.0",
+	"description": "",
+	"type": "module",
+	"bin": {
+		"pnpm-better-pack": "bin/pnpm-better-pack.mjs"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com:men232/pnpm-better-pack.git"
+	},
+	"files": [
+		"LICENSE",
+		"bin/*",
+		"scripts/*"
+	],
+	"keywords": [
+		"pnpm",
+		"pack",
+		"monorepo"
+	],
+	"author": "Andrew L.",
+	"license": "MIT",
+	"dependencies": {
+		"@pnpm/directory-fetcher": "^7.0.7",
+		"@pnpm/exportable-manifest": "^5.0.9",
+		"@pnpm/fs.find-packages": "^2.0.8",
+		"@pnpm/fs.indexed-pkg-importer": "^5.0.8",
+		"commander": "^11.1.0"
+	},
+	"devDependencies": {
+		"@types/node": "^20.9.3",
+		"eslint-config-prettier": "latest",
+		"prettier": "latest"
+	}
+}
