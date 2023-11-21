@@ -9,7 +9,7 @@ import { createIndexedPkgImporter } from '@pnpm/fs.indexed-pkg-importer';
 /**
  * @param {string} packageName
  * @param {string} targetDirectory
- * @param {{ P: boolean; D: boolean; optional: boolean; outLocal: string; exclude: string[] }} options
+ * @param {{ P: boolean; D: boolean; optional: boolean; outLocal: string; exclude: string[]; excludeDeepDev: string[] }} options
  */
 export async function main(packageName, targetDirectory, options) {
 	const APP_ROOT = process.cwd();
@@ -40,6 +40,7 @@ export async function main(packageName, targetDirectory, options) {
 	}
 
 	const excludeSet = new Set(options.exclude);
+	const excludeDeepDev = new Set(options.excludeDeepDev);
 	const startAt = Date.now();
 	const copyPackage = createPkgCopy();
 
@@ -47,7 +48,9 @@ export async function main(packageName, targetDirectory, options) {
 
 	await copyPackage(packageName, targetDirectory, false, 0);
 
-	console.info(`\nDone in ${((Date.now() - startAt) / 1000).toFixed(1)} seconds.`);
+	console.info(
+		`\nDone in ${((Date.now() - startAt) / 1000).toFixed(1)} seconds.`,
+	);
 
 	function createPkgCopy() {
 		const copied = new Set();
@@ -67,12 +70,12 @@ export async function main(packageName, targetDirectory, options) {
 				let prefix = '    ';
 
 				for (let idx = 2; idx < spaces; idx += 2) {
-					prefix += ' ├ '
+					prefix += ' ├ ';
 				}
 
 				prefix += ' ├─';
 
-				console.info(prefix, ...args)
+				console.info(prefix, ...args);
 			};
 
 			if (copied.has(pkgName)) return true;
@@ -114,13 +117,18 @@ export async function main(packageName, targetDirectory, options) {
 				print(`${meta.manifest.name} ${meta.manifest.version}`);
 			}
 
+			if (meta.manifest.name && excludeDeepDev.has(meta.manifest.name)) {
+				delete publishManifest.devDependencies;
+				delete publishManifest.devDependencies;
+			}
+
 			fs.writeFileSync(
 				path.resolve(pkgPath, 'package.json'),
 				JSON.stringify(publishManifest, null, 2),
 			);
 
 			const { dependencies, devDependencies, optionalDependencies } =
-				meta.manifest;
+				publishManifest;
 
 			if ((options.P || !options.D) && dependencies) {
 				for (const deepDependency of Object.keys(dependencies)) {

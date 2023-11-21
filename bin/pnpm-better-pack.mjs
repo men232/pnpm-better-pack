@@ -18,6 +18,7 @@ program
 	.option('--out-local <folder>', 'A place where workspace dependencies be located', 'packages')
 	.option('--no-optional', '`optionalDependencies` are not installed', false)
 	.option('--exclude <items>', 'Comma separated package name list', commaSeparatedList, '')
+	.option('--exclude-deep-dev <items>', 'Comma separated package name list', commaSeparatedList, '')
 	.action(main);
 
 program.parse();
