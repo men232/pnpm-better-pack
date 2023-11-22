@@ -8,8 +8,6 @@ A CLI to extract pnpm package from workspace with local dependencies
 
 ### Usage
 
-Most users (me) use npx to run Genevy on the command line like this:
-
 ```bash
 # pnpm
 cd <workspace root>
